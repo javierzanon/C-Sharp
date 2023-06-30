@@ -1,0 +1,11 @@
+DROP PROCEDURE IF EXISTS procListDispositivo;
+CREATE PROCEDURE procListDispositivo
+AS
+BEGIN
+
+SELECT d.id AS ID, d.ip AS IP, dd.ip AS chequearPreviamenteIP
+FROM pong.[dbo].dispositivo d
+inner join pong.[dbo].dispositivo dd on dd.id = d.chequearpreviamenteid
+WHERE d.eliminado = 0
+
+END

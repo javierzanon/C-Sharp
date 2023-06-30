@@ -1,0 +1,9 @@
+DROP PROCEDURE IF EXISTS checkDocumentoBloqueado;
+CREATE PROCEDURE checkDocumentoBloqueado
+@documentoid BIGINT
+AS
+BEGIN
+	DECLARE @bloqueado BIGINT
+	SELECT @bloqueado = d.bloqueado FROM [bpssgestion].[dbo].documento d WHERE d.documentoid = @documentoid
+	SELECT @bloqueado
+END 

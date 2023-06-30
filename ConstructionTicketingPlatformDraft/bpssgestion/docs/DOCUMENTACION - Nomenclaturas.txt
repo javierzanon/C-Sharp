@@ -1,0 +1,9 @@
+Las tablas y las funciones se llaman con nombres en singular, no plural. Usuario, foto, etc.
+El campo ID para un tipo de dato (usuario, foto, documento, etc) se llama TIPO+ID, ej usuarioid. 
+Los controladores van en la carpeta controllers.
+Las vistas van en la carpeta views, dentro de la carpeta con el nombre del controlador que la usa. 
+Las vistas se deben llamar con el nombre de la función que la usa.
+Los elementos estáticos se encuentran en la carpeta wwwroot.
+La clase con los elementos de acceso a datos, configuraciones y clases de tipos de datos es bpssdb, ubicada en el archivo DB.cs en el raíz del proyecto.
+Las clases con las funciones para utilización de la base de datos desde el código serán: blsslist, bpsswrite, bpss+funcion_a_realiar_en_la_base. 
+Las clases con las funciones para la utilización de la base de datos se ubicaran en un archivo con su nombre de clase, en el raíz del proyecto.

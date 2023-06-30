@@ -1,0 +1,16 @@
+CREATE PROCEDURE procListStatusInactivo AS 
+BEGIN
+
+SELECT d.dispositivo, d.ip, e.estado, g.grupo, a.fecha FROM
+(SELECT d.id AS dispositivoid, MAX(a.fecha) maxfecha
+FROM actividad a 
+INNER JOIN dispositivo d ON a.dispositivoid = d.id
+GROUP BY d.id) act
+INNER JOIN actividad a ON act.maxfecha = a.fecha
+INNER JOIN dispositivo d ON a.dispositivoid = d.id
+INNER JOIN estado e ON a.estadoid = e.id
+INNER JOIN grupo g ON d.grupoid = g.id
+WHERE d.eliminado = 0 AND e.id = 0
+ORDER BY estado desc, grupo, dispositivo
+
+END

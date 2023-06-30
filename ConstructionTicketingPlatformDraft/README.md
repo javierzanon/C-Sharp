@@ -1,0 +1,1 @@
+This is the draft of a Construction Ticketing Plaftorm, to register penaltys applied to Country Club constructors that dont't follow the construction guidelines.

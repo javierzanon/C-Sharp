@@ -1,0 +1,9 @@
+CREATE TABLE "usuario" (
+	"usuarioid" BIGINT NOT NULL DEFAULT 'NULL',
+	"usuario" VARCHAR(50) NULL DEFAULT 'NULL' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	"clave" VARCHAR(50) NULL DEFAULT 'NULL' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	"accionidusuario" BIGINT NULL DEFAULT 'NULL',
+	"accionfecha" DATETIME NULL DEFAULT 'NULL',
+	PRIMARY KEY ("usuarioid")
+)
+;

@@ -1,0 +1,204 @@
+@model bpssgestion.bpssdbparametros.BuscarDocumento
+
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+
+    <title>Buscar Documento</title>
+    
+</head>
+<body>
+  <main role="main">
+      <section class="jumbotron">
+          <div class="container">
+              <h1 class="jumbotron-heading" style="text-align: left">
+                  Buscar Documento
+              </h1>
+          </div>
+      </section>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <p class="lead text-muted" style="text-align: center"></p>
+              <form action="Lista" 
+                    enctype="multipart/form-data" 
+                    method="post" id="formularioDocumento" name="formularioDocumento">
+                  <dl>
+                      <dt>
+                          <label for="DocumentoTipo_FormDocumento">Tipo de Documento a Buscar</label>
+                      </dt>
+                      <dd>
+                        <select id="documentotipoid" name="documentotipoid" />
+                            <option value="0">Todos</option>
+                            @foreach (var item in @Model.documentotipo)
+                            {
+                                <option value=
+                                "@Html.DisplayFor(modelItem => item.documentotipoid)"
+                                >@Html.DisplayFor(modelItem => item.documentotipo)</option>
+                            }
+                        </select>
+                      </dd>
+                      <dt>
+                          <label for="DocumentoEstado_FormDocumento">Estado de Documento a Buscar</label>
+                      </dt>
+                      <dd>
+                        <select id="documentoestadoid" name="documentoestadoid" />
+                            <option value="0">Todos</option>
+                            @foreach (var item in @Model.documentoestado)
+                            {
+                                <option value=
+                                "@Html.DisplayFor(modelItem => item.documentoestadoid)"
+                                >@Html.DisplayFor(modelItem => item.documentoestado)</option>
+                            }
+                        </select>
+                      </dd>
+                      
+                      <dt>
+                          <label for="UbicacionArea_FormDocumento">Area a Buscar</label>
+                      </dt>
+                      <dd>
+                        <select id="areaid" name="areaid" onchange="onchangeArea();" />
+                            <option value="0">Todas</option>
+                            @foreach (var item in @Model.area)
+                            {
+                                <option value=
+                                "@Html.DisplayFor(modelItem => item.areaid)"
+                                >@Html.DisplayFor(modelItem => item.area)</option>
+                            }
+                        </select>
+                      </dd>
+                      <dt>
+                          <label for="UbicacionLote_FormDocumento">Lote a Buscar</label>
+                      </dt>
+                      <dd>
+                        <select id="loteid" name="loteid" />
+                                <option value="0">Todos</option>
+                        </select>
+                      </dd>
+                      <dt>
+                          <label for="DocumentoFechas_FormDocumento">Fechas de Creación de Documento a Buscar</label>
+                      </dt>
+                      <dd>
+                        Fecha desde <input name="fechainicio" id="fechainicio" type="date" value="1945-09-02" /> <br> Fecha hasta <input name="fechafin" id="fechafin" type="date" value="1945-09-02">
+                      </dd>
+                      <dt>
+                          <label for="DocumentoUsuario_FormDocumento">Usuario creador de Documento a Buscar</label>
+                      </dt>
+                      <dd>
+                        <select id="usuarioid" name="usuarioid" />
+                            <option value="0">Todos</option>
+                            @foreach (var item in @Model.usuario)
+                            {
+                                <option value=
+                                "@Html.DisplayFor(modelItem => item.usuarioid)"
+                                >@Html.DisplayFor(modelItem => item.usuarioNombre)</option>
+                            }
+                        </select>
+                      </dd>
+                  </dl>
+                  <div name="botonSubmit" id="botonSubmit">
+                    <table>
+                    <tr>
+                      <td><input class="btn" type="submit" value="Buscar" name="crearSubmit" id="crearSubmit" /></td>
+                      <td><input type="submit" value="Crear Nuevo" onclick="window.location.href = 'Nuevo';"/></td>
+                    </tr>
+                  </table>                    
+                  </div>
+                  <div style="margin-top:15px">
+                      <output name="result"></output>
+                  </div>
+              </form>
+            </p>
+            <div name="divMensaje" id="divMensaje" style="display: none">
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      function agregarLote(loteTexto, loteValor)
+      {
+        //Defino variable para manejar el listbox
+        var listaLotes = document.getElementById("loteid");
+        //Defino variable para agregar opción nueva
+        var item = document.createElement("option");
+        //Lleno la variable con datos
+        item.text = loteTexto;
+        item.value = loteValor;
+        listaLotes.add(item);
+      }
+      function onchangeArea()
+      {
+          //Defino variable para manerjar el listado de lotes
+          var listaLotes = document.getElementById("loteid");
+          //Defino variable con la cantidad actual de lotes en listado
+          var cantidadItems = listaLotes.options.length;
+          //Borro los lotes listados
+          for (i = cantidadItems-1; i >= 0; i--) {
+            listaLotes.options[i] = null;
+          }
+          //Defino variable item
+          var item = document.createElement("option");
+          //Configuro un item nuevo
+          item.text = "Cargando lotes...";
+          item.value = "0";
+          //Lo agrego al listado
+          listaLotes.add(item);
+          //Oculto el submit en el formulario
+          document.getElementById("botonSubmit").style.display="none";
+          //Defino variable con el área elegida
+          areaElegida = $("#areaid").val();
+          //Busco los lotes del área elegida
+          jQuery.post('../../Formulario/Lote', {areaId: areaElegida},  // url
+            function (data, textStatus, jqXHR) {  // success callback
+                if (data == "Session Timeout")
+                {
+                  window.location.href = '/login';
+                } 
+                var lotesRecibidos = JSON.parse(data);
+                var cantidadLotes = Object.keys(lotesRecibidos.lotes).length;
+                //Defino variables
+                listaLotes.options[0] = null;
+                minimoUnLote = false;
+                //var cantidadLotes = Object.keys(lotesRecibidos.lotes).length;
+                //Recorro el JSON resultado
+                //Previamente agrego el lote "Todos"
+                agregarLote("Todos", "0");
+                for (var i = 0; i < cantidadLotes; i++)
+                {
+                  //Si llego acá es que mínimo se va a cargar un lote
+                  minimoUnLote = true;
+                  //Agrego el lote a la lista
+                  agregarLote(lotesRecibidos.lotes[i].lote, lotesRecibidos.lotes[i].loteid);
+                }
+                //En caso de que no se haya cargado ni un lote
+                //Cargo un ítem avisando que no hay lotes
+                if (minimoUnLote == false)
+                {
+                  item.text = "Area sin lotes";
+                  item.value = "0";
+                  listaLotes.add(item);
+                }
+                else
+                {
+                  //En caso de que si se hayan cargado lotes muestro el botón submit del formulario
+                  document.getElementById("botonSubmit").style.display="block";
+                }
+          });
+      }
+      
+    </script>
+    
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</body>
+</html>

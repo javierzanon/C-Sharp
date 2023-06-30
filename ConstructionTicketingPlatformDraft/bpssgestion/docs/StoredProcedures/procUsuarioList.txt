@@ -1,0 +1,53 @@
+DROP PROCEDURE IF EXISTS procUsuarioList;
+CREATE PROCEDURE procUsuarioList
+	@usuarioid BIGINT,
+	@usuario VARCHAR(50),
+	@clave VARCHAR(50),
+	@accionidusuario BIGINT,
+	@accionfecha DATETIME 
+AS
+BEGIN
+
+IF (@usuarioid IS NOT NULL)
+BEGIN
+	SELECT u.usuarioid, u.usuario, u.clave, u.accionidusuario, u.accionfecha FROM [bpssgestion].[dbo].usuario u
+	WHERE u.usuarioid = @usuarioid
+END 
+ELSE 
+BEGIN
+	IF (@usuario IS NOT NULL)
+	BEGIN
+		SELECT u.usuarioid, u.usuario, u.clave, u.accionidusuario, u.accionfecha FROM [bpssgestion].[dbo].usuario u
+		WHERE u.usuario LIKE concat('%', @usuario, '%')
+	END
+	ELSE 
+	BEGIN 
+		IF (@accionidusuario IS NOT NULL)
+		BEGIN 
+			IF (@accionfecha IS NOT NULL)
+			BEGIN 
+				SELECT u.usuarioid, u.usuario, u.clave, u.accionidusuario, u.accionfecha FROM [bpssgestion].[dbo].usuario u
+				WHERE u.accionidusuario = @accionidusuario AND u.accionfecha = @accionfecha
+			END 
+			ELSE 
+			BEGIN
+				SELECT u.usuarioid, u.usuario, u.clave, u.accionidusuario, u.accionfecha FROM [bpssgestion].[dbo].usuario u
+				WHERE u.accionidusuario = @accionidusuario
+			END 
+		END 
+		ELSE 
+		BEGIN
+			IF (@accionfecha IS NOT NULL)
+			BEGIN 
+				SELECT u.usuarioid, u.usuario, u.clave, u.accionidusuario, u.accionfecha FROM [bpssgestion].[dbo].usuario u
+				WHERE u.accionfecha = @accionfecha
+			END 
+			ELSE 
+			BEGIN
+				SELECT null
+			END 		 
+		END 
+	END 
+END
+
+END 

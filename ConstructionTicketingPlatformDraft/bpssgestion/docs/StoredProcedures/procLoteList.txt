@@ -1,0 +1,10 @@
+DROP PROCEDURE IF EXISTS procLoteList;
+CREATE PROCEDURE procLoteList
+	@areaid BIGINT
+AS
+BEGIN
+
+SELECT l.loteid, l.lote FROM [bpssgestion].[dbo].lote l
+WHERE l.areaid = @areaid
+
+END 

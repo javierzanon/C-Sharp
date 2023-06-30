@@ -1,0 +1,46 @@
+DROP PROCEDURE IF EXISTS procDocumentoExtendidoList;
+CREATE PROCEDURE procDocumentoExtendidoList
+	@areaid BIGINT,
+	@loteid BIGINT,
+	@documentotipoid BIGINT,
+	@documentoestadoid BIGINT,
+	@fechainicio DATETIME,
+	@fechafin DATETIME,
+	@usuarioid BIGINT
+AS
+BEGIN
+	Declare @sql NVARCHAR(MAX)
+	SET @sql = 
+	'SELECT d.documentoid, d.documentoTipoId, dt.documentoTipo, d.documentoEstadoId, de.documentoEstado, d.fecha, d.areaId, ar.area, d.loteId, lot.lote, d.bloqueado, d.accionusuarioid, usr.usuarionombre, d.accionfecha
+	FROM [bpssgestion].[dbo].documento d
+	INNER JOIN [bpssgestion].[dbo].documentoTipo dt ON d.documentoTipoId = dt.documentoTipoId
+	INNER JOIN [bpssgestion].[dbo].documentoEstado de ON d.documentoEstadoId = de.documentoEstadoId
+	INNER JOIN [bpssgestion].[dbo].area ar ON ar.areaid = d.areaId
+	INNER JOIN [bpssgestion].[dbo].lote lot ON lot.loteid = d.loteId
+	INNER JOIN [bpssgestion].[dbo].usuario usr ON usr.usuarioid = d.accionusuarioid WHERE 1 = 1'
+	IF (@areaid <> 0)
+	BEGIN
+		SET @sql = @sql + ' AND d.areaid = ' + CAST(@areaid AS VARCHAR(MAX))
+	END
+	IF (@loteid <> 0)
+	BEGIN
+		SET @sql = @sql + ' AND d.loteid = ' + CAST(@loteid AS VARCHAR(MAX))
+	END
+	IF (@documentotipoid <> 0)
+	BEGIN
+		SET @sql = @sql + ' AND d.documentotipoid = ' + CAST(@documentotipoid AS VARCHAR(MAX))
+	END
+	IF (@documentoestadoid <> 0)
+	BEGIN
+		SET @sql = @sql + ' AND d.documentoestadoid = ' + CAST(@documentoestadoid AS VARCHAR(MAX))
+	END
+	IF (@fechainicio <> '1945-09-02 00:00:00' and @fechafin <> '1945-09-02 00:00:00')
+	BEGIN
+		SET @sql = @sql + ' AND d.fecha BETWEEN ''' + CAST(@fechainicio AS VARCHAR(MAX)) + ''' AND ''' + CAST(@fechafin AS VARCHAR(MAX)) + ''''
+	END
+		IF (@usuarioid <> 0)
+	BEGIN
+		SET @sql = @sql + ' AND d.accionusuarioid = ' + CAST(@usuarioid AS VARCHAR(MAX))
+	END
+	EXEC sp_executesql @sql
+END 

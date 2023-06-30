@@ -1,0 +1,8 @@
+DROP PROCEDURE IF EXISTS actDocumentoBloquear;
+CREATE PROCEDURE actDocumentoBloquear
+@documentoid BIGINT
+AS
+BEGIN
+	UPDATE [bpssgestion].[dbo].documento SET bloqueado = 1, documentoEstadoId = 2 WHERE documentoid = @documentoid
+	SELECT 1
+END 

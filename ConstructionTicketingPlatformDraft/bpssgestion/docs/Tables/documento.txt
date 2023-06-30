@@ -1,0 +1,19 @@
+CREATE TABLE "documento" (
+	"documentoid" BIGINT NOT NULL DEFAULT 'NULL',
+	"documentotipo" BIGINT NULL DEFAULT 'NULL',
+	"documentoestado" BIGINT NULL DEFAULT 'NULL',
+	"fecha" DATETIME NOT NULL DEFAULT 'NULL',
+	"area" VARCHAR(2) NULL DEFAULT 'NULL' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	"lote" VARCHAR(2) NULL DEFAULT 'NULL' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	"estado" BIGINT NULL DEFAULT 'NULL',
+	"accionidusuario" BIGINT NULL DEFAULT 'NULL',
+	"accionfecha" DATETIME NULL DEFAULT 'NULL',
+	PRIMARY KEY ("documentoid"),
+	FOREIGN KEY INDEX "FK__documentoTipo" ("documentotipo"),
+	FOREIGN KEY INDEX "FK__documentoEstado" ("documentoestado"),
+	FOREIGN KEY INDEX "FK__usuario" ("accionidusuario"),
+	CONSTRAINT "FK__usuario" FOREIGN KEY ("accionidusuario") REFERENCES "usuario" ("idusuario") ON UPDATE NO_ACTION ON DELETE NO_ACTION,
+	CONSTRAINT "FK__documentoTipo" FOREIGN KEY ("documentotipo") REFERENCES "documentoTipo" ("documentoid") ON UPDATE NO_ACTION ON DELETE NO_ACTION,
+	CONSTRAINT "FK__documentoEstado" FOREIGN KEY ("documentoestado") REFERENCES "documentoEstado" ("estadoid") ON UPDATE NO_ACTION ON DELETE NO_ACTION
+)
+;

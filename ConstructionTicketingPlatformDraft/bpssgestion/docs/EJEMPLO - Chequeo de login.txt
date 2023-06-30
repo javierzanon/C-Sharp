@@ -1,0 +1,14 @@
+bpsstools herramientas = new bpsstools();
+            Boolean resultadoLogin = herramientas.LoginGet(HttpContext.Session);
+            if (resultadoLogin == false)
+                return  Redirect("../../Login");
+            else
+            {
+
+
+bpsstools herramientas = new bpsstools();
+            Boolean resultadoLogin = herramientas.LoginGet(HttpContext.Session);
+            if (resultadoLogin == false)
+                return Content("Por favor vuelva a iniciar sesión.");
+            else
+            {

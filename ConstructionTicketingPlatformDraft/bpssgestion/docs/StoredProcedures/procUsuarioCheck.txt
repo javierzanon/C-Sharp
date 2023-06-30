@@ -1,0 +1,18 @@
+DROP PROCEDURE IF EXISTS procUsuarioCheck;
+CREATE PROCEDURE procUsuarioCheck
+	@usuario VARCHAR(50)
+AS
+BEGIN
+	DECLARE @usuarioactivo BIGINT
+	DECLARE @usuariologin VARCHAR(50)
+	SELECT @usuariologin=u.usuario, @usuarioactivo=u.activo FROM [bpssgestion].[dbo].usuario u
+	WHERE u.usuario = @usuario
+		IF (@usuariologin = @usuario AND @usuarioactivo= 1)
+		BEGIN 
+			SELECT 'OK'
+		END 
+		ELSE
+		BEGIN 
+			SELECT 'NO'
+		END 
+END

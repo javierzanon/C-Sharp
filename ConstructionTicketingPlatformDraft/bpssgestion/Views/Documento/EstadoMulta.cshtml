@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+
+    <title>Descripción de Documento</title>
+</head>
+<body>
+  <dd class="col-sm-10">
+      <p class="lead text-muted" style="text-align: center">
+        <b>@ViewBag.parametro.documentoExtendido.documentoTipo nº <i>@ViewBag.parametro.documentoExtendido.documentoId</i> | Lote <i>@ViewBag.parametro.documentoExtendido.lote</i> Área <i>@ViewBag.parametro.documentoExtendido.area</i> | Creada el <i>@ViewBag.parametro.documentoExtendido.fecha</i></b>
+      </p>
+      <hr>
+  </div>
+    <main role="main">
+          Estimados, se informa multa por irregularidades 
+          <br>
+          
+    <dd class="col-sm-10">    
+        <p style="text-align: center">
+            <table class="table" name="tableListadoDescripcionCargada" id="tableListadoDescripcionCargada">
+              @foreach (var dato in ViewBag.parametro.descripcionesCargadas)
+              {
+                    <tr>
+                        <td>
+                            @dato.documentoDescripcion
+                        </td>
+                        <td>
+                            @dato.documentoDescripcionNotas
+                        </td>
+                    </tr>
+              }
+            </table>
+        </p>
+        <hr>
+    </dd>
+          <br>
+          <b><s>Presente.-</s></b>
+          <br>
+          Nos dirigimos a Ud. a fin de informarle que, como resultado de la/s inspección/es realizada/s en el lote del Área @ViewBag.parametro.documentoExtendido.area, Lote @ViewBag.parametro.documentoExtendido.lote, se han detectado las infracciones y faltas al Reglamento de Construcción/convivencia.
+          <br>
+          <br>
+          DISCLAIMER:
+          <br>
+          Se le informa que para darle continuidad al avance de la misma, deberá presentar la modificación correspondiente en el departamento de Arquitectura y municipalidad.
+          <br>
+          Sin perjuicio de la presente notificación, quedamos a su disposición para aclarar cualquier consulta al respecto.
+          <br>
+    <div name="divMensaje" id="divMensaje" style="display: none"></div>
+    <hr>
+    </main>      
+    <script>
+      function cargarImagen()
+      {
+        window.location.href = '/Documento/' + @ViewBag.parametro.documentoExtendido.documentoId + '/Imagen';
+      }
+      function bloquearDocumento()
+      {
+        document.getElementById("formularioDescripcionNueva").style.display="none";
+        document.getElementById("tableListadoDescripcionCargada").style.display="none";
+        document.getElementById("divBotones").style.display="none";
+        document.getElementById("divMensaje").style.display="block";
+        document.getElementById("divMensaje").innerHTML = "Finalizando la creación del documento. Por favor espere."
+        jQuery.post("../Bloquear", {DocumentoId: @ViewBag.parametro.documentoExtendido.documentoId}, function(result){
+          window.location.href = '/Documento/' + @ViewBag.parametro.documentoExtendido.documentoId + '/Estado';
+        })
+        .fail(function() {
+          document.getElementById("divMensaje").innerHTML = "Se ha producido un error";
+        });
+      }
+      async function BorrarDescripcion (documentodescripcionid, tableRow) 
+      {
+        document.getElementById("formularioDescripcionNueva").style.display="none";
+        document.getElementById("tableListadoDescripcionCargada").style.display="none";
+        document.getElementById("divBotones").style.display="none";
+        document.getElementById("divMensaje").style.display="block";
+        document.getElementById("divMensaje").innerHTML = "Borrando la descripción. Por favor espere."
+        jQuery.post("../Borrar/Descripcion", {documentoId: @ViewBag.parametro.documentoExtendido.documentoId, documentoDescripcionId: documentodescripcionid}, function(result){
+          if (result == "OK")
+          {
+            var filaBorrar = tableRow.parentNode.parentNode.rowIndex;
+            document.getElementById("tableListadoDescripcionCargada").deleteRow(filaBorrar);
+            document.getElementById("formularioDescripcionNueva").style.display="block";
+            document.getElementById("tableListadoDescripcionCargada").style.display="block";
+            document.getElementById("divBotones").style.display="block";
+            document.getElementById("divMensaje").style.display="none";
+          }
+          else
+          {
+            document.getElementById("formularioDescripcionNueva").style.display="block";
+            document.getElementById("tableListadoDescripcionCargada").style.display="block";
+            document.getElementById("divBotones").style.display="block";
+            document.getElementById("divMensaje").style.display="none";
+            alert (result)
+          }
+        })
+        .fail(function() {
+          document.getElementById("divMensaje").innerHTML = "Se ha producido un error";
+        });
+      }
+      async function AgregarDescripcion () 
+      {
+        document.getElementById("formularioDescripcionNueva").style.display="none";
+        document.getElementById("tableListadoDescripcionCargada").style.display="none";
+        document.getElementById("divBotones").style.display="none";
+        document.getElementById("divMensaje").style.display="block";
+        document.getElementById("divMensaje").innerHTML = "Agregando descripción. Por favor espere."
+        jQuery.post("../Agregar/Descripcion", {DocumentoId: @ViewBag.parametro.documentoExtendido.documentoId, DocumentoDescripcionId: document.getElementById("documentoDescripcionId").value, DocumentoDescripcionNotas: document.getElementById("documentoDescripcionNotas").value}, function(result){
+          if (result == "OK")
+          {
+            
+            var table = document.getElementById("tableListadoDescripcionCargada");
+            var row = table.insertRow(table.rows.length);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var dataList=document.getElementById("documentoDescripcionId");
+            cell1.innerHTML = dataList.options[dataList.selectedIndex].text + " | " + document.getElementById("documentoDescripcionNotas").value;
+            cell2.innerHTML = "<input type='submit' value='Eliminar' onclick='BorrarDescripcion(" + document.getElementById("documentoDescripcionId").value + ",this);'/>";
+            
+            document.getElementById("formularioDescripcionNueva").style.display="block";
+            document.getElementById("tableListadoDescripcionCargada").style.display="block";
+            document.getElementById("divBotones").style.display="block";
+            document.getElementById("divMensaje").style.display="none";
+          }
+          else
+          {
+            document.getElementById("formularioDescripcionNueva").style.display="block";
+            document.getElementById("tableListadoDescripcionCargada").style.display="block";
+            document.getElementById("divBotones").style.display="block";
+            document.getElementById("divMensaje").style.display="none";
+            alert (result)
+          }
+        })
+        .fail(function() {
+          document.getElementById("divMensaje").innerHTML = "Se ha producido un error";
+        });
+      }
+    </script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/popper.min.js"></script>
+    <script src="../../../../js/bootstrap.min.js"></script>
+</body>
+</html>

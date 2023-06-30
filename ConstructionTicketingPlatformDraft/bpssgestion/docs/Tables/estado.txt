@@ -1,0 +1,6 @@
+CREATE TABLE "documentoEstado" (
+	"estadoid" BIGINT NOT NULL DEFAULT 'NULL',
+	"estado" VARCHAR(255) NULL DEFAULT 'NULL' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	PRIMARY KEY ("estadoid")
+)
+;

@@ -1,0 +1,41 @@
+DROP PROCEDURE IF EXISTS actDocumentoDescripcionAgregar;
+CREATE PROCEDURE actDocumentoDescripcionAgregar
+@documentoid BIGINT,
+@documentodescripcionid BIGINT,
+@documentodescripcionnotas VARCHAR(MAX)
+AS
+BEGIN
+	DECLARE @bloqueado BIGINT
+	DECLARE @conteo BIGINT
+	DECLARE @respuesta1 BIGINT
+	DECLARE @respuesta2 VARCHAR(MAX)
+	DECLARE @respuesta3 VARCHAR(MAX) 
+	SELECT @bloqueado = d.bloqueado FROM [bpssgestion].[dbo].documento d WHERE d.documentoid = @documentoid
+	IF (@bloqueado = 0)
+	BEGIN 
+
+		SELECT @conteo = COUNT(reld.documentoid) FROM [bpssgestion].[dbo].relDocumentoDescripcion reld WHERE reld.documentoid = @documentoid AND reld.documentodescripcionid = @documentodescripcionid
+		IF (@conteo = 0)
+		BEGIN 
+			INSERT INTO [bpssgestion].[dbo].relDocumentoDescripcion VALUES (@documentoid, @documentodescripcionid, @documentodescripcionnotas)
+			SELECT @respuesta1 = @documentodescripcionid 
+			SELECT @respuesta2 = doc.documentodescripcion FROM [bpssgestion].[dbo].DocumentoDescripcion doc WHERE doc.documentodescripcionid = @documentodescripcionid
+			SELECT @respuesta3 = @documentodescripcionnotas
+			SELECT @respuesta1, @respuesta2, @respuesta3
+		END 
+		ELSE 
+		BEGIN
+			SELECT @respuesta1 = -1
+			SELECT @respuesta2 = '-'
+			SELECT @respuesta3 = '-'
+			SELECT @respuesta1, @respuesta2, @respuesta3
+		END 
+	END 
+	ELSE 
+	BEGIN 
+		SELECT @respuesta1 = -2
+		SELECT @respuesta2 = '-'
+		SELECT @respuesta3 = '-'
+		SELECT @respuesta1, @respuesta2, @respuesta3
+	END 
+END 

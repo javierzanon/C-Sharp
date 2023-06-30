@@ -1,0 +1,8 @@
+DROP PROCEDURE IF EXISTS procUsuarioActivar;
+CREATE PROCEDURE procUsuarioActivar
+	@usuario VARCHAR(50)
+AS
+BEGIN
+		UPDATE usuario SET activo = 1 WHERE usuario = @usuario
+		SELECT 'OK'
+END 

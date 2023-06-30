@@ -1,0 +1,75 @@
+
+
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+
+    <title>Lista de Documentos</title>
+</head>
+<body>
+
+    <dt class="col-sm-2">
+
+    </dt>
+    <dd class="col-sm-10">
+        <table class="table">
+            <tr>
+                <th>Area</th>
+                <th>Lote</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Fecha de creación</th>
+                <th>Creado Por</th>
+                <th><input type="submit" value="Nuevo Documento" onclick="AccederADocumento(-1);" /></th>
+            </tr>
+            @foreach (var dato in ViewBag.listaDocumento)
+            {
+                <tr>
+                    <td>
+                        @dato.area
+                    </td>
+                    <td>
+                        @dato.lote
+                    </td>
+                    <td>
+                        @dato.documentoTipo
+                    </td>
+                    <td>
+                        @dato.documentoEstado
+                    </td>
+                    <td>
+                        @dato.fecha
+                    </td>
+                    <td>
+                        @dato.accionusuario
+                    </td>
+                    <td>
+                        <input type="submit" value="Ver" onclick="AccederADocumento(@dato.documentoId);" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </dd>
+
+    <script>
+        function AccederADocumento(documentoid)
+        {
+            if (documentoid != -1)
+                window.location.href = "Acceder/" + documentoid;
+            else
+                window.location.href = "Nuevo";
+        }
+    </script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+DROP PROCEDURE IF EXISTS procDocumentoStore;
+CREATE PROCEDURE procDocumentoStore
+@documentotipo BIGINT,
+@documentoestado BIGINT,
+@fecha DATETIME,
+@area BIGINT,
+@lote BIGINT,
+@bloqueado BIGINT,
+@accionusuarioid BIGINT,
+@accionfecha DATETIME
+AS
+BEGIN
+	DECLARE @idanterior BIGINT
+	BEGIN TRANSACTION transacTest
+	SELECT @idanterior = MAX(documentoid) FROM [bpssgestion].[dbo].documento d WITH (TABLOCK, HOLDLOCK)
+	INSERT INTO documento VALUES (@idanterior + 1, @documentotipo, @documentoestado, @fecha, @area, @lote, @bloqueado, @accionusuarioid, @accionfecha)
+	COMMIT TRANSACTION transacTest
+	SELECT @idanterior + 1
+END 

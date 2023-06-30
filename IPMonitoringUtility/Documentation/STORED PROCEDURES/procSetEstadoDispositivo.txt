@@ -1,0 +1,10 @@
+DROP PROCEDURE IF EXISTS procSetEstadoDispositivo;
+CREATE PROCEDURE procSetEstadoDispositivo
+@dispositivoid BIGINT,
+@estadoid BIGINT
+AS
+BEGIN
+
+INSERT INTO pong.[dbo].actividad VALUES (CURRENT_TIMESTAMP,@dispositivoid, @estadoid);
+
+END

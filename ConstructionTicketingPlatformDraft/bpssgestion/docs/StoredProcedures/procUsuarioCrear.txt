@@ -1,0 +1,23 @@
+DROP PROCEDURE IF EXISTS procUsuarioCrear;
+CREATE PROCEDURE procUsuarioCrear
+	@usuario VARCHAR(50),
+	@clave VARCHAR(50),
+	@nombre VARCHAR(200)
+AS
+BEGIN
+		DECLARE @conteo BIGINT 
+		DECLARE @clavecrypt VARCHAR(100)
+		DECLARE @existente BIGINT 
+		SELECT @clavecrypt = sys.fn_varbintohexsubstring(0, HashBytes('SHA1', @clave), 1, 0)
+		SELECT @conteo = COUNT(u.usuarioid) + 1 FROM usuario u
+		SELECT @existente = COUNT(u.usuarioid) FROM usuario u WHERE u.usuario = @usuario
+		IF (@existente = 0)
+		BEGIN 
+			INSERT INTO usuario VALUES (@conteo, @usuario, @clavecrypt, @nombre, 1, 0, GETDATE())
+			SELECT 'OK'
+		END 
+		ELSE 
+		BEGIN 
+			SELECT 'NO'
+		END 
+END 

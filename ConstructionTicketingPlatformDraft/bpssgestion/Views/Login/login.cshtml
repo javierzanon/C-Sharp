@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+
+    <title>Login</title>
+</head>
+<body>
+    <main role="main">
+        <section class="jumbotron">
+            <div class="container">
+                <h1 class="jumbotron-heading" style="text-align: center">
+                    Iniciar Sesión
+                </h1>
+                
+            </div>
+        </section>
+        <p class="lead text-muted" style="text-align: center">
+            
+        </p>
+        <p style="text-align: center">
+            <div name="loginform" id="loginform" style="display: block">
+                Usuario: <input type="text" name="usuario" id="usuario" value="" />
+                <br>
+                Clave: <input type="password" name="clave" id="clave" value="" />
+                <br>
+                <input type="submit" name="iniciar" id="iniciar" value="Iniciar Sesión" onclick="iniciarSesion();" />
+            </div>
+            <div name="mensaje" id="mensaje" style="display: none">
+                
+            </div>
+        </p>
+    </main>
+    <script>
+        function iniciarSesion()
+        {
+            document.getElementById("loginform").style.display="none";
+            document.getElementById("mensaje").style.display="block";
+            document.getElementById("mensaje").innerHTML = "Iniciando sesión...";
+            jQuery.post("./login", {usuario: document.getElementById("usuario").value, clave: document.getElementById("clave").value}, function(result){
+            if (result == "OK")
+            {
+                window.location.href = "../Documento/Busqueda";
+            }
+            else
+            {
+                document.getElementById("loginform").style.display="block";
+                document.getElementById("mensaje").style.display="none";
+                document.getElementById("usuario").value = "";
+                document.getElementById("clave").value = "";
+            }
+            });
+        }
+    </script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

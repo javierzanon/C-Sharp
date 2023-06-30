@@ -1,0 +1,10 @@
+CREATE TABLE "descripcion" (
+	"descripcionid" BIGINT NOT NULL DEFAULT 'NULL',
+	"descripcion" VARCHAR(255) NULL DEFAULT 'NULL' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	"documentoid" BIGINT NULL DEFAULT 'NULL',
+	"valor" INT NULL DEFAULT NULL,
+	PRIMARY KEY ("descripcionid"),
+	FOREIGN KEY INDEX "FK_descripcion_documento" ("documentoid"),
+	CONSTRAINT "FK_descripcion_documento" FOREIGN KEY ("documentoid") REFERENCES "documento" ("documentoid") ON UPDATE NO_ACTION ON DELETE NO_ACTION
+)
+;

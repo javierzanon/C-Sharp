@@ -1,0 +1,21 @@
+DROP PROCEDURE IF EXISTS procUsuarioLoginCheck;
+CREATE PROCEDURE procUsuarioLoginCheck
+	@usuario VARCHAR(50),
+	@clave VARCHAR(50)
+AS
+BEGIN
+	DECLARE @usuarioactivo BIGINT
+	DECLARE @usuariologin VARCHAR(50)
+	DECLARE @clavecrypt VARCHAR(100)
+	SELECT @clavecrypt = sys.fn_varbintohexsubstring(0, HashBytes('SHA1', @clave), 1, 0)
+	SELECT @usuariologin=u.usuario, @usuarioactivo=u.activo FROM [bpssgestion].[dbo].usuario u
+	WHERE u.usuario = @usuario AND u.clave = @clavecrypt
+		IF (@usuariologin = @usuario AND @usuarioactivo= 1)
+		BEGIN 
+			SELECT 'OK'
+		END 
+		ELSE
+		BEGIN 
+			SELECT 'NO'
+		END 
+END

@@ -1,0 +1,10 @@
+try
+{
+    
+} 
+catch (Exception e)
+{
+    bpsslog log = new bpsslog();
+    log.log(e.ToString());
+    return Content("Se ha producido un error.");
+}

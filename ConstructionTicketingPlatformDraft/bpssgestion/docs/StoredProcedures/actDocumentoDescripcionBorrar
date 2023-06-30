@@ -1,0 +1,11 @@
+DROP PROCEDURE IF EXISTS actDocumentoDescripcionBorrer;
+CREATE PROCEDURE actDocumentoDescripcionBorrar
+@documentoid BIGINT,
+@documentodescripcionid BIGINT
+AS
+BEGIN
+	DECLARE @respuesta BIGINT 
+	DELETE FROM [bpssgestion].[dbo].relDocumentoDescripcion WHERE documentoid = @documentoid AND documentodescripcionid = @documentodescripcionid
+	SELECT @respuesta = 1
+	SELECT @respuesta
+END 

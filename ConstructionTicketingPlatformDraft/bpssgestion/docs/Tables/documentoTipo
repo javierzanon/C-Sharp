@@ -1,0 +1,6 @@
+CREATE TABLE "documentoTipo" (
+	"documentoid" BIGINT NOT NULL DEFAULT 'NULL',
+	"documento" VARCHAR(255) NOT NULL DEFAULT '''''' COLLATE 'SQL_Latin1_General_CP1_CI_AS',
+	PRIMARY KEY ("documentoid")
+)
+;

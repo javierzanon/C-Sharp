@@ -1,0 +1,16 @@
+DROP PROCEDURE IF EXISTS procDocumentoExtendidoShow;
+CREATE PROCEDURE procDocumentoExtendidoShow
+@documentoid BIGINT
+AS
+BEGIN
+
+	SELECT d.documentoid, d.documentoTipoId, dt.documentoTipo, d.documentoEstadoId, de.documentoEstado, d.fecha, d.areaId, ar.area, d.loteId, lot.lote, d.bloqueado, d.accionusuarioid, usr.usuario, d.accionfecha
+	FROM [bpssgestion].[dbo].documento d
+	INNER JOIN [bpssgestion].[dbo].documentoTipo dt ON d.documentoTipoId = dt.documentoTipoId
+	INNER JOIN [bpssgestion].[dbo].documentoEstado de ON d.documentoEstadoId = de.documentoEstadoId
+	INNER JOIN [bpssgestion].[dbo].area ar ON ar.areaid = d.areaId
+	INNER JOIN [bpssgestion].[dbo].lote lot ON lot.loteid = d.loteId
+	INNER JOIN [bpssgestion].[dbo].usuario usr ON usr.usuarioid = d.accionusuarioid 
+
+	WHERE d.documentoid = @documentoid
+END 

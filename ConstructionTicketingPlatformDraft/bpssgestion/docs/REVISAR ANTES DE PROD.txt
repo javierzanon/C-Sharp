@@ -1,0 +1,2 @@
+REVISAR QUE SE REGISTRE EL ID DE USUARIO QUE CREA DOCUMENTOS 
+EL ARCHIVO launchSettings.json tiene definido (además de localhost) la IP de la pc para hacer debugging, sacarla o ajustarla según vaya cambiando la IP de la PC

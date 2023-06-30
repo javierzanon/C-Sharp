@@ -1,0 +1,11 @@
+DROP PROCEDURE IF EXISTS procDocumentoDescripcionList;
+CREATE PROCEDURE procDocumentoDescripcionList
+@documentoid BIGINT
+AS
+BEGIN
+	SELECT de.documentoDescripcionid, de.documentoDescripcion, relDD.documentoDescripcionNotas 
+	FROM [bpssgestion].[dbo].documento d
+	INNER JOIN [bpssgestion].[dbo].relDocumentoDescripcion relDD ON d.documentoId = relDD.documentoId
+	INNER JOIN [bpssgestion].[dbo].documentoDescripcion de ON relDD.documentoDescripcionId = de.documentoDescripcionId
+	WHERE d.documentoid = @documentoid
+END 

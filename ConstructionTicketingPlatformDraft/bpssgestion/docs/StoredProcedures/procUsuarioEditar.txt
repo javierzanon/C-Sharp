@@ -1,0 +1,28 @@
+DROP PROCEDURE IF EXISTS procUsuarioEditar;
+CREATE PROCEDURE procUsuarioEditar
+	@usuario VARCHAR(50),
+	@clave VARCHAR(50),
+	@nombre VARCHAR(200)
+AS
+BEGIN
+		DECLARE @clavecrypt VARCHAR(100)
+		DECLARE @existente BIGINT 
+		SELECT @existente = COUNT(u.usuarioid) FROM usuario u WHERE u.usuario = @usuario
+		IF (@existente = 0)
+		BEGIN 
+			SELECT 'NO'
+		END 
+		ELSE 
+		BEGIN
+			IF (@clave <> '')
+			BEGIN 
+				SELECT @clavecrypt = sys.fn_varbintohexsubstring(0, HashBytes('SHA1', @clave), 1, 0)
+				UPDATE usuario SET clave = @clavecrypt WHERE usuario = @usuario
+			END 
+			IF (@nombre <> '')
+			BEGIN 
+				UPDATE usuario SET usuarionombre = @nombre WHERE usuario = @usuario
+			END  
+			SELECT 'OK'
+		END 
+END 
